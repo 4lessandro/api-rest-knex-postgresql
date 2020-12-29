@@ -41,10 +41,19 @@ class UserController {
 
     }
 
-    async FindId(req, res) {
+    async findById(req, res) {
+
+        //Pesquisar usuário através do ID
         var id = req.params.id;
         var user = await User.findById(id)
-        res.json(user)
+
+        if(user == undefined) {
+            res.status(404)
+            res.send('ID não existe')
+        } else {
+            res.status(200)
+            res.json(user)
+        }
     }
 }
 

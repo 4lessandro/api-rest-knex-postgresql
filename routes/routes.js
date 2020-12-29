@@ -9,6 +9,6 @@ const UserController = require('../controllers/UserController');
 router.get('/', HomeController.index);
 router.post('/user', UserController.create);
 router.get('/user', UserController.index);
-router.get('/user/:id', UserController.FindId);
+router.get('/user/:id', UserController.findById);
 
 module.exports = router;
