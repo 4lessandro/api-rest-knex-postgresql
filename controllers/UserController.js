@@ -3,6 +3,16 @@ var User = require('../models/User');
 class UserController {
     async index(req, res) {
 
+        //Listar todos os usuários cadastrados
+        var users = await User.findUsers()
+        
+        if(users) {
+            res.status(200)
+            res.json(users)
+        } else {
+            res.status(400)
+            res.send('Erro ao consultar os usuários')
+        }
     }
 
     async create(req, res) {
