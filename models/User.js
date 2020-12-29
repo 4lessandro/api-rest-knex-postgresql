@@ -31,13 +31,24 @@ class User {
     }
 
     //Method responsável em listar todos os usuários que existe no banco de dados
-    async findUsers() {
+    async findAllUsers() {
         try {
             var users = await knex.select(['id', 'name', 'email']).table('users')
             return users
         } catch(error) {
             console.log(error)
             return [];
+        }
+    }
+    
+    //Method responsável em pesquisar um usuário através do ID
+    async findById(id) {
+        try {
+            var result = await knex.select(['id', 'name', 'email']).table('users').where({id: id})
+            return result
+        } catch(error) {
+            res.status(404)
+            return undefined;
         }
     }
 }

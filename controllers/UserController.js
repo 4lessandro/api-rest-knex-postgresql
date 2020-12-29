@@ -4,7 +4,7 @@ class UserController {
     async index(req, res) {
 
         //Listar todos os usuários cadastrados
-        var users = await User.findUsers()
+        var users = await User.findAllUsers()
         
         if(users) {
             res.status(200)
@@ -39,6 +39,12 @@ class UserController {
         res.status(200)
         res.send('Usuário cadastrado com sucesso')
 
+    }
+
+    async FindId(req, res) {
+        var id = req.params.id;
+        var user = await User.findById(id)
+        res.json(user)
     }
 }
 
