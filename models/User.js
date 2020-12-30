@@ -22,7 +22,7 @@ class User {
             if(result.length > 0) {
                 return true
             } else {
-                return false
+                return false //Possível cadastrar email
             }
 
         } catch (error) {
@@ -32,7 +32,7 @@ class User {
     }
 
     //Method responsável em listar todos os usuários que existe no banco de dados
-    async findAllUsers() {
+    async findAll() {
         try {
             var users = await knex.select(['id', 'name', 'email']).table('users')
             return users
@@ -57,6 +57,42 @@ class User {
         } catch (error) {
             console.log(error)
             return false
+        }
+    }
+
+    //Method responsável por editar informações de usuários
+    async update(id, name, email, role) {
+        var user = await this.findById(id)
+
+        if(user != undefined) {
+            var updatedUser = {};
+
+            if(email != undefined) {
+                if(email != user.email) {
+                    var result = await this.findEmail(email)
+                    if(result == false) {
+                        updatedUser.email = email
+                    }
+                }
+            }
+
+            if(name != undefined) {
+                updatedUser.name = name
+            }
+
+            if(role != undefined) {
+                updatedUser.role = role
+            }
+
+            try {
+                await knex.update(updatedUser).where({id: id}).table('users')
+                return {status: true}
+            } catch (error) {
+                return {status: false, error: error}
+            }
+
+        } else {
+            return {error: 'Não foi possível editar dados, tente mais tarde.'}
         }
     }
 }

@@ -4,7 +4,7 @@ class UserController {
     async index(req, res) {
 
         //Listar todos os usuários cadastrados
-        var users = await User.findAllUsers()
+        var users = await User.findAll()
         
         if(users) {
             res.status(200)
@@ -55,6 +55,27 @@ class UserController {
         } else {
             res.status(200)
             res.json(user)
+        }
+    }
+
+    async edit(req, res) {
+
+        //Editar usuários
+        var { id, name, role, email } = req.body
+
+        var result = await User.update(id, name, role, email)
+
+        if(result != undefined) {
+            if(result.status) {
+                res.status(200)
+                res.send('Usuário atualizado com sucesso.')
+            } else {
+                res.status(406)
+                res.send('Erro ao atualizar usuário')
+            }
+        } else {
+            res.status(406)
+            res.send('Erro no servidor. Tente mais tarde.')
         }
     }
 }
