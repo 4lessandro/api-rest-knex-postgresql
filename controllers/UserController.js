@@ -68,14 +68,14 @@ class UserController {
         if(result != undefined) {
             if(result.status) {
                 res.status(200)
-                res.send('Usuário atualizado com sucesso.')
+                res.json({success: 'Usuário atualizado com sucesso.'})
             } else {
                 res.status(406)
-                res.send('Erro ao atualizar usuário')
+                res.json({error: 'Erro ao atualizar. Tente novamente mais tarde..'})
             }
         } else {
             res.status(406)
-            res.send('Erro no servidor. Tente mais tarde.')
+            res.json({error: 'Erro no servidor. Tente novamente mais tarde.'})
         }
     }
 }
