@@ -8,8 +8,9 @@ class User {
         try {
             const hash = await bcrypt.hash(password, 10)
             await knex.insert({name, email, password: hash, role: 0}).table('users')
+            return {success: 'Usuário cadastrado com sucesso'}
         } catch(error) {
-            console.log(error)
+            return {error: 'Erro ao cadastrar usuário'}
         }
     }
 

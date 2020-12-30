@@ -11,7 +11,7 @@ class UserController {
             res.json(users)
         } else {
             res.status(400)
-            res.send('Erro ao consultar os usuários')
+            res.json(users.error)
         }
     }
 
@@ -21,7 +21,7 @@ class UserController {
         //Verificar se os campos foram preenchidos
         if(email == undefined || name == undefined || password == undefined || password.length <= 0) {
             res.status(400)
-            res.send('Preencha os campos corretamente')
+            res.json({error: 'Preencha os campos corretamente.'})
         }
 
         //Verificar se o e-mail  já existe no banco de dados
@@ -29,15 +29,17 @@ class UserController {
 
         if(emailExists) {
             res.status(401)
-            res.send('O e-mail já existe.')
+            res.json({error: 'E-mail já existe.'})
             return
         }
 
         //Criar o usuário
-        await User.new(name, email, password)
+        var user = await User.new(name, email, password)
 
         res.status(200)
-        res.send('Usuário cadastrado com sucesso')
+        res.json(user)
+        res.json(user.status)
+
 
     }
 
@@ -49,7 +51,7 @@ class UserController {
 
         if(user == undefined) {
             res.status(404)
-            res.send('ID não existe')
+            res.json({error: 'ID não encontrado.'})
         } else {
             res.status(200)
             res.json(user)
