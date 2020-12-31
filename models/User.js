@@ -95,6 +95,24 @@ class User {
             return {error: 'Não foi possível editar dados, tente mais tarde.'}
         }
     }
+
+    //Method responsável em deletar um usuário através de seu ID
+    async delete(id) {
+        var user = await this.findById(id)
+
+        if(user != undefined) {
+
+            try {
+                await knex.delete().where({id: id}).table('users')
+                return {status: true}
+            } catch (error) {
+                return {status: false, error: error}
+            }
+
+        } else {
+            return {status: false, error: 'Usuário não existe, portanto não pode ser deletado.'}
+        }
+    }
 }
 
 
