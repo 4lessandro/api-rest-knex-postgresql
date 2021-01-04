@@ -1,4 +1,4 @@
-const knex = require('../database/connection.js');
+const knex = require('../database/connection');
 const bcrypt = require('bcrypt');
 
 class User {
@@ -59,6 +59,26 @@ class User {
             return false
         }
     }
+
+    //Method responsável em pesquisar um usuário através do E-MAIL
+    async findByEmail(email) {
+    
+        try {
+            var result = await knex.select(['id', 'name', 'email']).where({email: email}).table('users')
+
+            if(result.length > 0) {
+                return result
+            } else {
+                return undefined
+            }
+
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
+
+    
 
     //Method responsável por editar informações de usuários
     async update(id, name, email, role) {

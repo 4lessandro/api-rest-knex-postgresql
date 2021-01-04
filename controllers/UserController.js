@@ -1,4 +1,5 @@
 var User = require('../models/User');
+var PasswordToken = require('../models/PasswordToken');
 
 class UserController {
     async index(req, res) {
@@ -90,6 +91,19 @@ class UserController {
         } else {
             res.status(406)
             res.json({error: 'Usuário deletado com sucesso.'})
+        }
+    }
+
+    async recoverPassword(req, res) {
+        var email = req.body.email
+        var result = await PasswordToken.create(email)
+
+        if(result.status) {
+            res.status(200)
+            res.json({success: result.token})
+        } else {
+            res.status(406)
+            res.json({error: 'E-mail não existe.'})
         }
     }
 }
