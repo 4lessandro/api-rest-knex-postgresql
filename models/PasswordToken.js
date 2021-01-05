@@ -3,6 +3,7 @@ const User = require('./User');
 const { v4: uuidv4 } = require('uuid');
 
 class PasswordToken {
+    //Method responsável em realizar a criação do Token para recuperação de senha
     async create(email) {
         var user = await User.findByEmail(email)
         if(user != undefined) {
@@ -18,7 +19,28 @@ class PasswordToken {
         } else {
             return {status: false, error: 'E-mail não existe'}
         }
-    }   
+    }
+
+    //Method responsável em realizar a alteração de senha em base do token criado acima
+    async validate(token) {
+        try {
+            var result = await knex.select().where({token: token}).table('passwordtoken')
+
+            if(result.length > 0) {
+                var tk = result[0]
+                if(tk.used) {
+                    return {status: false}
+                } else {
+                    return {status: true, token: tk}
+                }
+            } else {
+                return {status: false}
+            }
+        } catch(error) {
+            console.log(error)
+            return {status: false, error: error}
+        }
+    }
 }
 
 module.exports = new PasswordToken();
