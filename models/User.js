@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 class User {
 
     //Method responsável em realizar a criação do usuário
-    async new(name, email, password) {
+    async new (name, email, password) {
         try {
             const hash = await bcrypt.hash(password, 10)
             await knex.insert({name, email, password: hash, role: 0}).table('users')
@@ -15,7 +15,7 @@ class User {
     }
 
     //Method responsável em verificar se o e-mail já existe no banco de dados
-    async findEmail(email) {
+    async findEmail (email) {
         try {
             var result = await knex.select('*').from('users').where({email: email})
 
@@ -32,7 +32,7 @@ class User {
     }
 
     //Method responsável em listar todos os usuários que existe no banco de dados
-    async findAll() {
+    async findAll () {
         try {
             var users = await knex.select(['id', 'name', 'email']).table('users')
             return users
@@ -43,10 +43,10 @@ class User {
     }
     
     //Method responsável em pesquisar um usuário através do ID
-    async findById(id) {
+    async findById (id) {
     
         try {
-            var result = await knex.select(['id', 'name', 'email']).table('users').where({id: id})
+            var result = await knex.select(['id', 'name', 'email']).where({id: id}).table('users')
 
             if(result.length > 0) {
                 return result
@@ -61,7 +61,7 @@ class User {
     }
 
     //Method responsável em pesquisar um usuário através do E-MAIL
-    async findByEmail(email) {
+    async findByEmail (email) {
     
         try {
             var result = await knex.select(['id', 'name', 'email']).where({email: email}).table('users')
@@ -81,7 +81,7 @@ class User {
     
 
     //Method responsável por editar informações de usuários
-    async update(id, name, email, role) {
+    async update (id, name, email, role) {
         var user = await this.findById(id)
 
         if(user != undefined) {
@@ -117,7 +117,7 @@ class User {
     }
 
     //Method responsável em deletar um usuário através de seu ID
-    async delete(id) {
+    async delete (id) {
         var user = await this.findById(id)
 
         if(user != undefined) {
@@ -132,6 +132,12 @@ class User {
         } else {
             return {status: false, error: 'Usuário não existe, portanto não pode ser deletado.'}
         }
+    }
+
+    //Method responsável em realizar a alteração de senha utilizando o token criado 'passwordToken'
+    async changePassword(newpassword, id, token) {
+        const hash = await bcrypt.hash(newpassword, 10)
+        await knex.update({password: newpassword}).where({id: id}).table('users')
     }
 }
 

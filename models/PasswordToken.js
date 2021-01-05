@@ -21,7 +21,7 @@ class PasswordToken {
         }
     }
 
-    //Method responsável em realizar a alteração de senha em base do token criado acima
+    //Method responsável em realizar a validação do token criado anteriromente
     async validate(token) {
         try {
             var result = await knex.select().where({token: token}).table('passwordtoken')
@@ -41,6 +41,7 @@ class PasswordToken {
             return {status: false, error: error}
         }
     }
+
 }
 
 module.exports = new PasswordToken();

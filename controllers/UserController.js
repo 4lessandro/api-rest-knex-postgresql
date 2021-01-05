@@ -2,8 +2,7 @@ var User = require('../models/User');
 var PasswordToken = require('../models/PasswordToken');
 
 class UserController {
-    async index(req, res) {
-
+    async index (req, res) {
         //Listar todos os usuários cadastrados
         var users = await User.findAll()
         
@@ -16,7 +15,7 @@ class UserController {
         }
     }
 
-    async create(req, res) {
+    async create (req, res) {
         var { name, email, password } = req.body
 
         //Verificar se os campos foram preenchidos
@@ -44,8 +43,7 @@ class UserController {
 
     }
 
-    async findById(req, res) {
-
+    async findById (req, res) {
         //Pesquisar usuário através do ID
         var id = req.params.id;
         var user = await User.findById(id)
@@ -59,8 +57,7 @@ class UserController {
         }
     }
 
-    async edit(req, res) {
-
+    async edit (req, res) {
         //Editar usuários
         var { id, name, role, email } = req.body
 
@@ -80,7 +77,7 @@ class UserController {
         }
     }
 
-    async remove(req, res) {
+    async remove (req, res) {
         //Deletar usuários
         var id = req.params.id
         var result = await User.delete(id)
@@ -94,7 +91,8 @@ class UserController {
         }
     }
 
-    async recoverPassword(req, res) {
+    async recoverPassword (req, res) {
+        //Recuperar Senha (Através do Token)
         var email = req.body.email
         var result = await PasswordToken.create(email)
 
@@ -104,6 +102,23 @@ class UserController {
         } else {
             res.status(406)
             res.json({error: 'E-mail não existe.'})
+        }
+    }
+
+    async changePassword (req, res) {
+        //Alterar Senha
+        var token = req.body.token
+        var password = req.body.password
+        var isTokenValid = await PasswordToken.validate(token)
+
+        if(isTokenValid) {
+            var result = await User.changePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
+            console.log(result)
+            res.status(200)
+            res.json({success: 'Senha alterada com sucesso.'})
+        } else {
+            res.status(406)
+            res.json({error: 'Token inválido.'})
         }
     }
 }
