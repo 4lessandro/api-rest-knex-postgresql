@@ -135,9 +135,9 @@ class User {
     }
 
     //Method responsável em realizar a alteração de senha utilizando o token criado 'passwordToken'
-    async changePassword(newpassword, id, token) {
+    async changePassword (newpassword, id, token) {
         const hash = await bcrypt.hash(newpassword, 10)
-        await knex.update({password: newpassword}).where({id: id}).table('users')
+        await knex.update({password: hash}).where({id: id}).table('users')
     }
 }
 
