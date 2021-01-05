@@ -1,5 +1,5 @@
-var User = require('../models/User');
-var PasswordToken = require('../models/PasswordToken');
+const User = require('../models/User');
+const PasswordToken = require('../models/PasswordToken');
 
 class UserController {
     async index (req, res) {
@@ -111,9 +111,8 @@ class UserController {
         var password = req.body.password
         var isTokenValid = await PasswordToken.validate(token)
 
-        if(isTokenValid) {
-            var result = await User.changePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
-            console.log(result)
+        if(isTokenValid.status) {
+            await User.changePassword(password, isTokenValid.token.user_id, isTokenValid.token.token)
             res.status(200)
             res.json({success: 'Senha alterada com sucesso.'})
         } else {

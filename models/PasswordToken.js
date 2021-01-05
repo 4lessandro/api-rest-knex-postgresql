@@ -29,17 +29,22 @@ class PasswordToken {
             if(result.length > 0) {
                 var tk = result[0]
                 if(tk.used) {
-                    return {status: false}
+                    return {status: false, error: 'Token já foi utilizado.'}
                 } else {
                     return {status: true, token: tk}
                 }
             } else {
-                return {status: false}
+                return {status: false, error: 'Token inválido.'}
             }
         } catch(error) {
             console.log(error)
             return {status: false, error: error}
         }
+    }
+
+    //Method responsável em realizar a atualização do token (se já foi utilizado)
+    async setUsed(token) {
+        await knex.update({used: 1}).where({token: token}).table('passwordtoken')
     }
 
 }
