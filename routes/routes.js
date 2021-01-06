@@ -6,9 +6,12 @@ const router = express.Router();
 const HomeController = require('../controllers/HomeController');
 const UserController = require('../controllers/UserController');
 
+//Middlewares
+const AdminAuth = require('../middlewares/AdminAuth');
+
 //GET
 router.get('/', HomeController.index);
-router.get('/user', UserController.index);
+router.get('/user', AdminAuth, UserController.index);
 router.get('/user/:id', UserController.findById);
 
 //POST
