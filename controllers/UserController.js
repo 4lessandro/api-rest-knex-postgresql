@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const PasswordToken = require('../models/PasswordToken');
+//const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 class UserController {
     async index (req, res) {
@@ -118,6 +120,26 @@ class UserController {
         } else {
             res.status(406)
             res.json({error: 'Token inválido.'})
+        }
+    }
+
+    async login (req, res) {
+        //Login
+        var { email, password } = req.body
+        var user = await User.findByEmail(email)
+
+        if(user != undefined) {
+            var result = await bcrypt.compare(password, user[0].password)
+
+            if(result) {
+                res.status(200)
+                res.json({success: 'Logado com sucesso.'})
+            } else {
+                res.status(406)
+                res.json({error: 'E-mail ou senha incorreta.'})
+            }
+        } else {
+            res.json({error: 'Usuário não existe.'})
         }
     }
 }

@@ -21,7 +21,7 @@ class PasswordToken {
         }
     }
 
-    //Method responsável em realizar a validação do token criado anteriromente
+    //Method responsável em realizar a validação do token criado anteriormente
     async validate(token) {
         try {
             var result = await knex.select().where({token: token}).table('passwordtoken')
