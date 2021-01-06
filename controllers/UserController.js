@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const PasswordToken = require('../models/PasswordToken');
-//const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 class UserController {
@@ -132,8 +132,9 @@ class UserController {
             var result = await bcrypt.compare(password, user[0].password)
 
             if(result) {
+                var token = jwt.sign({ email: user[0].email, role: user[0].role }, process.env.SECRET)
                 res.status(200)
-                res.json({success: 'Logado com sucesso.'})
+                res.json({success: 'Logado com sucesso.', token: token})
             } else {
                 res.status(406)
                 res.json({error: 'E-mail ou senha incorreta.'})
