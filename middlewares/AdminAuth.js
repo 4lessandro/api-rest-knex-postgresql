@@ -9,8 +9,16 @@ module.exports = function (req, res, next) {
 
         try {
             var decoded = jwt.verify(token, process.env.SECRET)
-            console.log(decoded)
-            next()
+            var date = new Date()
+            
+            if(decoded.role == 1) {
+                console.log(`Admin: ${decoded.name} consultou usuários às ${date}`)
+                next()
+            } else {
+                res.status(406).
+                res.json('Você não está autorizado.')
+                return
+            }
         } catch (error) {
             console.log(error)
             res.status(406)

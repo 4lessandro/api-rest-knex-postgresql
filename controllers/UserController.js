@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const PasswordToken = require('../models/PasswordToken');
+const PasswordToken = require('../token/PasswordToken');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -97,14 +97,14 @@ class UserController {
         //Recuperar Senha (Através do Token)
         var email = req.body.email
         var result = await PasswordToken.create(email)
-
-        if(result.status) {
-            res.status(200)
-            res.json({success: result.token})
-        } else {
-            res.status(406)
-            res.json({error: 'E-mail não existe.'})
-        }
+        
+            if(result.status) {
+                res.status(200)
+                res.json({success: result.token})
+            } else {
+                res.status(406)
+                res.json({error: 'E-mail não existe.'})
+            }
     }
 
     async changePassword (req, res) {
@@ -129,10 +129,10 @@ class UserController {
         var user = await User.findByEmail(email)
 
         if(user != undefined) {
-            var result = await bcrypt.compare(password, user[0].password)
+            var result = await bcrypt.compare(password, user.password)
 
             if(result) {
-                var token = jwt.sign({ email: user[0].email, role: user[0].role }, process.env.SECRET)
+                var token = jwt.sign({ name: user.name, email: user.email, role: user.role }, process.env.SECRET)
                 res.status(200)
                 res.json({success: 'Logado com sucesso.', token: token})
             } else {

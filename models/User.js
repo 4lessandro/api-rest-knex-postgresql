@@ -1,6 +1,6 @@
 const knex = require('../database/connection');
 const bcrypt = require('bcrypt');
-const PasswordToken = require('../models/PasswordToken');
+const PasswordToken = require('../token/PasswordToken');
 
 class User {
 
@@ -17,6 +17,7 @@ class User {
 
     //Method responsável em verificar se o e-mail já existe no banco de dados
     async findEmail (email) {
+
         try {
             var result = await knex.select('*').from('users').where({email: email})
 
@@ -63,12 +64,11 @@ class User {
 
     //Method responsável em pesquisar um usuário através do E-MAIL
     async findByEmail (email) {
-    
         try {
             var result = await knex.select('*').where({email: email}).table('users')
 
             if(result.length > 0) {
-                return result
+                return result[0]
             } else {
                 return undefined
             }
@@ -78,8 +78,6 @@ class User {
             return false
         }
     }
-
-    
 
     //Method responsável por editar informações de usuários
     async update (id, name, email, role) {

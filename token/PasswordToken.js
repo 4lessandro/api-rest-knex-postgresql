@@ -1,19 +1,18 @@
 const knex = require('../database/connection');
-const User = require('./User');
+const User = require('../models/User');
 const { v4: uuidv4 } = require('uuid');
 
 class PasswordToken {
     //Method responsável em realizar a criação do Token para recuperação de senha
     async create(email) {
-        var user = await User.findByEmail(email)
+        var user = await knex.select('*').where({email: email}).table('users').first()
         if(user != undefined) {
             try {
                 const token = uuidv4()
-                await knex.insert({user_id: user[0].id, used: 0, token: token}).table('passwordtoken')                
+                await knex.insert({user_id: user.id, used: 0, token: token}).table('passwordtoken')                
                 return {status: true, token: token}
-
             } catch(error) {
-                return {status: false, error: error}
+                return {status: false, error: 'Não existe'}
             }
 
         } else {
