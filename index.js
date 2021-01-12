@@ -2,6 +2,8 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const app = express()
 const router = require('./routes/routes')
+const cors = require('cors')
+app.use(cors())
 
 require("dotenv-safe").config();
 const PORT = process.env.PORT

@@ -19,6 +19,7 @@ router.post('/user', UserController.create);
 router.post('/recoverpassword', UserController.recoverPassword);
 router.post('/changepassword', UserController.changePassword);
 router.post('/login', UserController.login);
+router.post('/validate', AdminAuth, HomeController.validate);
 
 //PUT
 router.put('/user', UserController.edit);
