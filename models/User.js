@@ -65,7 +65,7 @@ class User {
     //Method responsável em pesquisar um usuário através do E-MAIL
     async findByEmail (email) {
         try {
-            var result = await knex.select('*').where({email: email}).table('users').first()
+            var result = await knex.select('*').where({email: email}).table('users')
 
             if(result.length > 0) {
                 return result[0]
