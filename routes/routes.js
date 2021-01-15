@@ -15,16 +15,16 @@ router.get('/user', AdminAuth, UserController.index);
 router.get('/user/:id', UserController.findById);
 
 //POST
-router.post('/user', UserController.create);
+router.post('/user', AdminAuth, UserController.create);
 router.post('/recoverpassword', UserController.recoverPassword);
 router.post('/changepassword', UserController.changePassword);
 router.post('/login', UserController.login);
 router.post('/validate', AdminAuth, HomeController.validate);
 
 //PUT
-router.put('/user', UserController.edit);
+router.put('/user', AdminAuth, UserController.edit);
 
 //DELETE
-router.delete('/user/:id', UserController.remove);
+router.delete('/user/:id', AdminAuth, UserController.remove);
 
 module.exports = router;

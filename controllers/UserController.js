@@ -89,7 +89,7 @@ class UserController {
             res.json({success: 'Usuário deletado com sucesso.'})
         } else {
             res.status(406)
-            res.json({error: 'Usuário deletado com sucesso.'})
+            res.json({error: 'Ops, ocorreu um  erro ao deletar o usuário.'})
         }
     }
 

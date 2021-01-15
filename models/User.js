@@ -36,7 +36,7 @@ class User {
     //Method responsável em listar todos os usuários que existe no banco de dados
     async findAll () {
         try {
-            var users = await knex.select(['id', 'name', 'email']).table('users')
+            var users = await knex.select(['id', 'name', 'email', 'role']).table('users')
             return users
         } catch(error) {
             console.log(error)
