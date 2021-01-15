@@ -48,10 +48,10 @@ class User {
     async findById (id) {
     
         try {
-            var result = await knex.select(['id', 'name', 'email']).where({id: id}).table('users')
+            var result = await knex.select(['id', 'name', 'email']).table('users').where({id: id})
 
             if(result.length > 0) {
-                return result
+                return result[0]
             } else {
                 return undefined
             }
@@ -65,7 +65,7 @@ class User {
     //Method responsável em pesquisar um usuário através do E-MAIL
     async findByEmail (email) {
         try {
-            var result = await knex.select('*').where({email: email}).table('users')
+            var result = await knex.select('*').where({email: email}).table('users').first()
 
             if(result.length > 0) {
                 return result[0]
@@ -80,7 +80,7 @@ class User {
     }
 
     //Method responsável por editar informações de usuários
-    async update (id, name, email, role) {
+    async update (id, email, name, role) {
         var user = await this.findById(id)
 
         if(user != undefined) {

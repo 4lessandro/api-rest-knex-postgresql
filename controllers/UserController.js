@@ -63,7 +63,8 @@ class UserController {
         //Editar usuários
         var { id, name, role, email } = req.body
 
-        var result = await User.update(id, name, role, email)
+        var result = await User.update(id, email, name, role)
+        console.log(result)
 
         if(result != undefined) {
             if(result.status) {
